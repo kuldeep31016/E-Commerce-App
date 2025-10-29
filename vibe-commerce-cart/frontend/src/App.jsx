@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FaShoppingCart } from 'react-icons/fa';
+import { Toaster, toast } from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
+import { LuShoppingBag, LuSearch } from 'react-icons/lu';
 import ProductGrid from './components/ProductGrid';
 import Cart from './components/Cart';
 import CheckoutForm from './components/CheckoutForm';
@@ -34,6 +36,7 @@ export default function App() {
   const handleAddToCart = async (productId, quantity) => {
     const updated = await addToCart(productId, quantity);
     setCart(updated);
+    toast.success('Added to cart');
   };
 
   const handleUpdateCart = async (itemId, quantity) => {
@@ -44,11 +47,13 @@ export default function App() {
   const handleRemove = async (itemId) => {
     const updated = await removeFromCart(itemId);
     setCart(updated);
+    toast('Item removed', { icon: '🗑️' });
   };
 
   const handleClear = async () => {
     const updated = await clearCart();
     setCart(updated);
+    toast('Cart cleared');
   };
 
   const openCheckout = () => setShowCheckout(true);
@@ -60,24 +65,43 @@ export default function App() {
     setShowCheckout(false);
     const newCart = await getCart();
     setCart(newCart);
+    toast.success('Order confirmed');
   };
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 bg-white/80 backdrop-blur z-30 border-b">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="font-extrabold text-xl text-primary">Vibe Commerce</div>
-          <button onClick={() => setShowCart(true)} className="relative inline-flex items-center gap-2 rounded-lg border px-3 py-2 hover:bg-gray-50">
-            <FaShoppingCart />
-            <span>Cart</span>
+      <Toaster position="top-center" />
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-slate-900/80 border-b border-white/10">
+        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3 group cursor-pointer">
+            <div className="text-3xl font-black gradient-text">VIBE</div>
+          </div>
+          <div className="flex-1 max-w-xl mx-8 hidden md:block">
+            <div className="relative group">
+              <LuSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <input className="w-full pl-12 pr-4 py-3 glass rounded-xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition-all duration-300 text-slate-100 placeholder-slate-400" placeholder="Search products..." />
+            </div>
+          </div>
+          <button onClick={() => setShowCart(true)} className="relative p-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/50 transition-all duration-300 hover:scale-105 active:scale-95">
+            <LuShoppingBag className="w-6 h-6 text-white" />
             {!!cartCount && (
-              <span className="absolute -top-2 -right-2 bg-primary text-white text-xs w-5 h-5 rounded-full grid place-items-center">{cartCount}</span>
+              <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center animate-bounce">{cartCount}</span>
             )}
           </button>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-6">
+      <main className="container mx-auto px-6 py-10">
+        <section className="relative h-72 overflow-hidden rounded-3xl mb-10">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600">
+            <div className="absolute inset-0 opacity-20" />
+          </div>
+          <div className="relative z-10 h-full flex flex-col items-center justify-center text-center">
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-5xl font-black text-white mb-2 tracking-tight">Welcome to Premium Shopping</motion.h1>
+            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="text-lg text-slate-100/90 mb-6">Discover curated products that elevate your lifestyle</motion.p>
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="px-6 py-3 bg-white text-indigo-600 rounded-xl font-semibold text-base hover:shadow-2xl transition-all">Explore Collection</motion.button>
+          </div>
+        </section>
         <ProductGrid products={products} loading={loadingProducts} onAddToCart={handleAddToCart} />
       </main>
 
