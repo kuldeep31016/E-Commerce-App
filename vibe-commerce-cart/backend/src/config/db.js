@@ -18,10 +18,7 @@ async function connectDB(uri) {
   });
 
   try {
-    await mongoose.connect(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(uri); // modern driver defaults
   } catch (error) {
     console.error('Failed to connect to MongoDB:', error.message);
     throw error;

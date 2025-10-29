@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LuShoppingBag, LuSearch } from 'react-icons/lu';
+import Navbar from './components/Navbar';
 import ProductGrid from './components/ProductGrid';
 import Cart from './components/Cart';
 import CheckoutForm from './components/CheckoutForm';
@@ -73,25 +73,7 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <Toaster position="top-center" />
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-slate-900/80 border-b border-white/10">
-        <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3 group cursor-pointer">
-            <div className="text-3xl font-black gradient-text">VIBE</div>
-          </div>
-          <div className="flex-1 max-w-xl mx-8 hidden md:block">
-            <div className="relative group">
-              <LuSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <input className="w-full pl-12 pr-4 py-3 glass rounded-xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 transition-all duration-300 text-slate-100 placeholder-slate-400" placeholder="Search products..." />
-            </div>
-          </div>
-          <button onClick={() => setShowCart(true)} className="relative p-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 hover:shadow-lg hover:shadow-indigo-500/50 transition-all duration-300 hover:scale-105 active:scale-95">
-            <LuShoppingBag className="w-6 h-6 text-white" />
-            {!!cartCount && (
-              <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center animate-bounce">{cartCount}</span>
-            )}
-          </button>
-        </div>
-      </header>
+      <Navbar cartCount={cartCount} onCartClick={() => setShowCart(true)} />
 
       <main className="container mx-auto px-6 py-10">
         <section className="relative h-72 overflow-hidden rounded-3xl mb-10">
