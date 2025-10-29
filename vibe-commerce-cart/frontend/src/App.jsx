@@ -6,6 +6,8 @@ import ProductGrid from './components/ProductGrid';
 import Cart from './components/Cart';
 import CheckoutForm from './components/CheckoutForm';
 import ReceiptModal from './components/ReceiptModal';
+import ValueProps from './components/ValueProps';
+import Footer from './components/Footer';
 import { getProducts, getCart, addToCart, updateCartItem, removeFromCart, clearCart, checkout } from './services/api';
 
 export default function App() {
@@ -102,7 +104,27 @@ export default function App() {
             <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="px-6 py-3 bg-white text-indigo-600 rounded-xl font-semibold text-base hover:shadow-2xl transition-all">Explore Collection</motion.button>
           </div>
         </section>
-        <ProductGrid products={products} loading={loadingProducts} onAddToCart={handleAddToCart} />
+
+        <ValueProps />
+
+        <div className="mt-12 mb-6 flex items-end justify-between">
+          <div>
+            <h2 className="text-3xl font-bold text-white">Featured Products</h2>
+            <p className="text-slate-400">Handpicked items just for you</p>
+          </div>
+        </div>
+        {products.length > 0 || loadingProducts ? (
+          <ProductGrid products={products} loading={loadingProducts} onAddToCart={handleAddToCart} />
+        ) : (
+          <div className="glass rounded-2xl p-8 text-center mt-4">
+            <h3 className="text-xl font-semibold text-white">No products yet</h3>
+            <p className="text-slate-400 mt-2">Start the backend to auto‑seed products, then refresh.</p>
+            <div className="text-left text-sm text-slate-400 bg-slate-900 rounded-xl border border-slate-700 p-4 mt-4">
+              <div>1) Open a new terminal:</div>
+              <pre className="mt-2"><code>{`cd "vibe-commerce-cart/backend"\nnpm install\nnpm run dev`}</code></pre>
+            </div>
+          </div>
+        )}
       </main>
 
       <Cart
@@ -128,6 +150,7 @@ export default function App() {
       )}
 
       <ReceiptModal receipt={receipt} onClose={() => setReceipt(null)} />
+      <Footer />
     </div>
   );
 }
